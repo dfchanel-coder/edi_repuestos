@@ -1,0 +1,12 @@
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Salidas temporales de herramientas
+tools/og.png
+tools/*-check.png
+
+# Editores
+.vscode/
+.idea/
