@@ -1,6 +1,8 @@
 # Auditoría — Edi Repuestos
 
 Fecha: 16/11/2026
+
+Actualización de entrega: HTTPS, página principal, robots.txt, sitemap.xml e imagen social responden 200. El dominio apex redirige a https://www.edirepuestos.com/. Se alinearon las URLs SEO con ese destino y la cobertura con Rivera y Uruguay; se regeneró la imagen social. Se agregó también el correo confirmado edirepuestos@hotmail.com en Contacto y en los datos estructurados. Las mediciones Lighthouse y de navegador que siguen corresponden a la auditoría previa; no se repitieron en esta revisión.
 Alcance: `index.html`, `assets/css/styles.css`, `assets/js/main.js`, `assets/img/productos/`, `robots.txt`, `sitemap.xml`.
 Método: revisión de código, medición en navegador real (Chromium vía Edge), Lighthouse 13.4.1 sobre servidor local `http://localhost:4173/`, y comprobaciones programáticas de layout, contraste, semántica e interacción.
 
@@ -110,7 +112,7 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 ### Semántica y accesibilidad
 
 - Un solo `<h1>`; jerarquía H2/H3 sin saltos.
-- `lang="es-UY"`; línea en portugués marcada con `lang="pt"`.
+- `lang="es-UY"`; contenido en español para Rivera y todo Uruguay.
 - Imágenes decorativas con `alt=""`; el logo de la ficha con `alt="Edi Repuestos"`.
 - Sin enlaces sin nombre accesible.
 - Skip link funcional hacia `#contenido`.
@@ -157,7 +159,7 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 
 | # | Limitación | Impacto | Decisión |
 | --- | --- | --- | --- |
-| 1 | Dominio sin DNS ni HTTPS activos | Canonical, OG, sitemap y schema ya apuntan a `https://edirepuestos.com`, pero hasta publicar esos enlaces no resuelven | Archivos listos y repo publicado. Falta activar GitHub Pages, cargar el dominio y crear los DNS (apex `A` + `www` `CNAME`); Pages redirige `www` → apex. |
+| 1 | Verificación posterior al despliegue | Los cambios requieren que GitHub Pages complete la publicación | Comprobar la cobertura nacional y el correo en la web tras desplegar; dominio y HTTPS funcionan. |
 | 2 | Horarios de feriados no publicados | El local puede cerrar en feriados sin aviso en la web | El horario regular ya está publicado y en el schema. Las excepciones se pueden agregar en `specialOpeningHoursSpecification`. |
 | 3 | Mapa embebido de Google (terceros) | Carga scripts de Google y puede setear cookies propias | Se usó el iframe oficial con `loading="lazy"` y alto reservado (`aspect-ratio`) para no afectar CLS. La dirección y el enlace a Maps funcionan sin el iframe. Si se exige privacidad estricta, se cambia por imagen estática enlazada. |
 | 4 | Sin formulario con backend | No hay envío automático de consultas desde un servidor | El mensaje se envía por WhatsApp con el texto precargado o se copia. Sin datos almacenados, sin spam, sin mantenimiento. |
@@ -175,7 +177,7 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 3. Crear o reclamar Google Business Profile con la dirección exacta y las mismas horas que la web.
 4. Revisar las fotos y los nombres del catálogo con el cliente: el sitio ya evita inventar datos, pero la asignación foto–producto se hizo por nombre de archivo.
 5. Evaluar fotos reales del mostrador y del local: hoy el sitio usa fotos de productos, y una toma del frente del local mejora confianza.
-6. Si se confirma el envío a todo el país, agregar una sección breve y actualizar el `areaServed` del schema.
+6. La cobertura de consultas ya incluye Uruguay en el contenido y `areaServed`. Los envíos siguen sujetos a coordinación por localidad.
 7. Si el cliente quiere publicar baterías, reutilizar los tres MP4 que quedaron en `videos/` como sección propia (hoy no se usan).
 8. Revisar en Search Console a los 30 días: impresiones por “repuestos Rivera”, CTR y consultas por clic en teléfono.
 
@@ -185,4 +187,4 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 
 El sitio cumple el objetivo: una página informativa, rápida y accesible que posiciona “repuestos automotores en Rivera”, muestra los datos verificados del local, presenta una muestra del catálogo con Liqui Moly como estrella y deriva la consulta a WhatsApp, al teléfono o a Instagram.
 
-No quedan problemas críticos ni altos abiertos. Falta publicar el dominio (`edirepuestos.com`) con DNS y HTTPS, unificar el listado de Google Business Profile con estos datos y que el cliente valide los nombres del catálogo. Los datos comerciales no confirmados quedaron fuera de la página de forma deliberada para no publicar información falsa.
+No quedan problemas críticos ni altos abiertos. El dominio y HTTPS ya están activos. Queda verificar el despliegue de esta actualización, unificar el listado de Google Business Profile con estos datos y que el cliente valide los nombres del catálogo. Los datos comerciales no confirmados quedaron fuera de la página de forma deliberada para no publicar información falsa.

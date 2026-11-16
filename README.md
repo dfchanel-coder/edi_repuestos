@@ -81,7 +81,7 @@ No abrir `index.html` con doble clic (`file://`): el menú móvil, el clipboard 
 3. **Qué encontrás** — repuestos, accesorios y consulta de disponibilidad.
 4. **Catálogo** — muestra del surtido: productos estrella Liqui Moly y doce rubros más.
 5. **Cómo consultar** — tres pasos.
-6. **Región fronteriza** — Rivera ↔ Santana do Livramento (incluye línea en portugués).
+6. **Cobertura nacional** — atención en Rivera y consultas desde todo Uruguay.
 7. **Ubicación** — dirección, horario, mapa de Google embebido y enlace para abrir la ubicación.
 8. **Contacto** — WhatsApp, teléfonos, redes y generador de consulta con envío directo.
 9. **Preguntas frecuentes** — seis respuestas, también en JSON-LD.
@@ -134,26 +134,26 @@ Los tres videos de baterías (`bateria_funsa.mp4`, `bateria_moura.mp4`, `bateria
 - **Meta description (145):** repuestos y accesorios multimarca, Liqui Moly, herramientas, iluminación LED, dirección y consulta por WhatsApp.
 - **H1 único:** `Repuestos y accesorios automotores en Rivera | Edi Repuestos`.
 - **Canonical:** raíz del dominio (el sitio es una sola página; no se creó una URL hija para la keyword principal).
-- **Keywords cubiertas en texto real:** repuestos automotores Rivera, repuestos y accesorios, multimarca, autopartes, Liqui Moly, lubricantes, herramientas, iluminación LED, frontera con Santana do Livramento, casa de repuestos.
+- **Keywords cubiertas en texto real:** repuestos automotores Rivera, repuestos y accesorios, multimarca, autopartes, Liqui Moly, lubricantes, herramientas, iluminación LED, atención en todo Uruguay, casa de repuestos.
 - **JSON-LD:** `AutoPartsStore` (dirección, teléfono, `contactPoint` de WhatsApp, `openingHoursSpecification`, área servida, `sameAs`), `WebSite` y `FAQPage` alineado con las preguntas visibles.
 
 ### Dominio
 
-El sitio quedó configurado para **`https://edirepuestos.com`** (dominio apex, sin `www`) en:
+El sitio quedó configurado para **`https://www.edirepuestos.com`** (dominio principal con `www`) en:
 
 - `index.html` → canonical, `og:url`, `og:image`, `twitter:image`, `@id` y `url` del JSON-LD
 - `robots.txt` → línea `Sitemap:`
 - `sitemap.xml` → `<loc>`
 
-Al publicar (repositorio ya subido a `github.com/dfchanel-coder/edi_repuestos`, rama `main`):
+El sitio ya está online. Configuración de referencia del repositorio `github.com/dfchanel-coder/edi_repuestos`, rama `main`:
 
 1. En **Settings → Pages**, publicar desde la rama `main`, carpeta `/ (root)`.
-2. En **Settings → Pages → Custom domain**, cargar `edirepuestos.com`; GitHub Pages redirige `www.edirepuestos.com` al apex. Activar **Enforce HTTPS** cuando el certificado esté emitido.
+2. En **Settings → Pages → Custom domain**, cargar `www.edirepuestos.com`; GitHub Pages redirige el apex a `www.edirepuestos.com`. Activar **Enforce HTTPS** cuando el certificado esté emitido.
 3. En el DNS del dominio:
    - `A` del apex a `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
    - `CNAME` de `www` a `dfchanel-coder.github.io`.
-4. Verificar que `https://edirepuestos.com/assets/img/og-edirepuestos.jpg` responda público: las redes sociales no siempre siguen redirecciones al buscar la imagen.
-5. Confirmar que `https://edirepuestos.com/robots.txt` y `/sitemap.xml` respondan 200 sin autenticación.
+4. Verificar que `https://www.edirepuestos.com/assets/img/og-edirepuestos.jpg` responda público: las redes sociales no siempre siguen redirecciones al buscar la imagen.
+5. Confirmar que `https://www.edirepuestos.com/robots.txt` y `/sitemap.xml` respondan 200 sin autenticación.
 
 ### Mapa de Google (contenido de terceros)
 
@@ -174,13 +174,13 @@ Implica una dependencia externa: al llegar a la sección, el navegador descarga 
 - WhatsApp principal: 099 823 483 · +598 99 823 483.
 - Celulares: 094 497 866 y 099 822 370.
 - Instagram y TikTok oficiales.
+- Correo electrónico: edirepuestos@hotmail.com (confirmado por el cliente).
 - Rubro: repuestos y accesorios automotores multimarca.
 
 ### Omitido a propósito (sin confirmación)
 
 | Dato | Motivo |
 | --- | --- |
-| `edirepuestos@hotmail.com` | Sin confirmación de vigencia. |
 | Teléfono de Brasil `55 981141494` | Sin confirmación. |
 | Medios de pago / crédito de la casa | Mencionado en redes, sin detalle contractual. |
 | Envíos a todo el país | Se menciona en redes; la web solo invita a consultar por envíos. |
@@ -191,9 +191,9 @@ Cuando el cliente confirme estos datos, se agregan al HTML y al JSON-LD (`email`
 
 ## 8. Checklist de publicación
 
-- [ ] Publicar desde `main` en GitHub Pages y cargar el dominio `edirepuestos.com`.
+- [x] Sitio publicado con dominio `www.edirepuestos.com`.
 - [ ] Crear los registros DNS (A del apex y CNAME de `www`) y activar Enforce HTTPS.
-- [ ] Publicar sobre HTTPS (obligatorio para el clipboard y para el canonical).
+- [x] Sitio accesible por HTTPS (verificado el 16/11/2026).
 - [ ] Verificar que `/assets/*` responda 200 y con cache largo (`Cache-Control: public, max-age=31536000, immutable` para fuentes e imágenes).
 - [ ] Comprimir HTML/CSS/JS con gzip o brotli en el servidor.
 - [ ] Enviar `sitemap.xml` en Google Search Console y Bing Webmaster Tools.

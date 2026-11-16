@@ -10,3 +10,6 @@ tools/*-check.png
 # Editores
 .vscode/
 .idea/
+
+# Perfil temporal de renderizado
+tools/.edge-preview/
