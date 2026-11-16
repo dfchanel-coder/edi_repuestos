@@ -143,7 +143,7 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 
 | # | Limitación | Impacto | Decisión |
 | --- | --- | --- | --- |
-| 1 | Dominio sin DNS ni HTTPS activos | Canonical, OG, sitemap y schema ya apuntan a `https://edirepuestos.com`, pero hasta publicar esos enlaces no resuelven | Archivos listos. Falta apuntar el DNS, emitir el certificado y redirigir `www` → apex. |
+| 1 | Dominio sin DNS ni HTTPS activos | Canonical, OG, sitemap y schema ya apuntan a `https://edirepuestos.com`, pero hasta publicar esos enlaces no resuelven | Archivos listos y repo publicado. Falta activar GitHub Pages, cargar el dominio y crear los DNS (apex `A` + `www` `CNAME`); Pages redirige `www` → apex. |
 | 2 | Horarios de feriados no publicados | El local puede cerrar en feriados sin aviso en la web | El horario regular ya está publicado y en el schema. Las excepciones se pueden agregar en `specialOpeningHoursSpecification`. |
 | 3 | Mapa embebido de Google (terceros) | Carga scripts de Google y puede setear cookies propias | Se usó el iframe oficial con `loading="lazy"` y alto reservado (`aspect-ratio`) para no afectar CLS. La dirección y el enlace a Maps funcionan sin el iframe. Si se exige privacidad estricta, se cambia por imagen estática enlazada. |
 | 4 | Sin formulario con backend | No hay envío automático de consultas desde un servidor | El mensaje se envía por WhatsApp con el texto precargado o se copia. Sin datos almacenados, sin spam, sin mantenimiento. |

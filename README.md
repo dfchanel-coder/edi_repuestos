@@ -101,12 +101,15 @@ El sitio quedó configurado para **`https://edirepuestos.com`** (dominio apex, s
 - `robots.txt` → línea `Sitemap:`
 - `sitemap.xml` → `<loc>`
 
-Al publicar:
+Al publicar (repositorio ya subido a `github.com/dfchanel-coder/edi_repuestos`, rama `main`):
 
-1. Apuntar el DNS del dominio al hosting y emitir el certificado HTTPS.
-2. Servir el sitio en `https://edirepuestos.com` y redirigir `www.edirepuestos.com` → apex con un 301. Así la URL real coincide con el canonical y no se duplica el contenido.
-3. Verificar que `https://edirepuestos.com/assets/img/og-edirepuestos.jpg` responda público: las redes sociales no siempre siguen redirecciones al buscar la imagen.
-4. Confirmar que `https://edirepuestos.com/robots.txt` y `/sitemap.xml` respondan 200 sin autenticación.
+1. En **Settings → Pages**, publicar desde la rama `main`, carpeta `/ (root)`.
+2. En **Settings → Pages → Custom domain**, cargar `edirepuestos.com`; GitHub Pages redirige `www.edirepuestos.com` al apex. Activar **Enforce HTTPS** cuando el certificado esté emitido.
+3. En el DNS del dominio:
+   - `A` del apex a `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
+   - `CNAME` de `www` a `dfchanel-coder.github.io`.
+4. Verificar que `https://edirepuestos.com/assets/img/og-edirepuestos.jpg` responda público: las redes sociales no siempre siguen redirecciones al buscar la imagen.
+5. Confirmar que `https://edirepuestos.com/robots.txt` y `/sitemap.xml` respondan 200 sin autenticación.
 
 ### Mapa de Google (contenido de terceros)
 
@@ -144,8 +147,8 @@ Cuando el cliente confirme estos datos, se agregan al HTML y al JSON-LD (`email`
 
 ## 7. Checklist de publicación
 
-- [ ] Apuntar el DNS de `edirepuestos.com` al hosting y emitir el certificado HTTPS.
-- [ ] Redirigir `www.edirepuestos.com` → `https://edirepuestos.com` con un 301.
+- [ ] Publicar desde `main` en GitHub Pages y cargar el dominio `edirepuestos.com`.
+- [ ] Crear los registros DNS (A del apex y CNAME de `www`) y activar Enforce HTTPS.
 - [ ] Publicar sobre HTTPS (obligatorio para el clipboard y para el canonical).
 - [ ] Verificar que `/assets/*` responda 200 y con cache largo (`Cache-Control: public, max-age=31536000, immutable` para fuentes e imágenes).
 - [ ] Comprimir HTML/CSS/JS con gzip o brotli en el servidor.
