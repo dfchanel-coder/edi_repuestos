@@ -19,7 +19,7 @@ Sitio estático sin framework, sin build y sin dependencias externas. Se publica
 | CSS | `assets/css/styles.css` — sistema visual propio, mobile-first |
 | JS | `assets/js/main.js` — menú móvil y generador de consulta (mejora progresiva) |
 | Tipografías | Barlow Condensed + Inter, autoalojadas en `assets/fonts/` |
-| Imágenes | Logo real en WebP, favicon SVG/PNG, imagen Open Graph JPEG |
+| Imágenes | Logo real en WebP, favicon SVG/PNG, imagen Open Graph JPEG, fotos de productos en WebP |
 | SEO técnico | `robots.txt`, `sitemap.xml`, canonical, Open Graph, Twitter Card |
 | Datos estructurados | JSON-LD `AutoPartsStore`, `WebSite`, `FAQPage` |
 
@@ -48,9 +48,14 @@ Edi_Repuestos/
 │     ├─ edi-logo-square.png  Logo cuadrado para schema.org
 │     ├─ og-edirepuestos.jpg  Imagen 1200×630 para redes
 │     ├─ favicon.svg / favicon-32.png / apple-touch-icon.png
+│     └─ productos/           Fotos de productos en WebP (720×900 y 480×480)
+├─ originales/                (no está en el repo) Fuente JPEG de las fotos
 └─ tools/
-   └─ og-card.html            Fuente para regenerar la imagen Open Graph
+   ├─ og-card.html            Fuente para regenerar la imagen Open Graph
+   └─ _build_productos.py     Optimiza las fotos y genera los WebP del catálogo
 ```
+
+Los originales en JPEG **no se guardan en el repositorio**: viven en `C:\Proyectos\Edi_Repuestos_originales` (junto a `videos/` con los MP4 de baterías). GitHub Pages publica todo lo que está en la rama, así que mantenerlos fuera evita exponer 8,4 MB de fuentes sin optimizar. `tools/` sí queda en el repo, pero no está enlazado desde la página.
 
 ---
 
@@ -72,25 +77,64 @@ No abrir `index.html` con doble clic (`file://`): el menú móvil, el clipboard 
 ## 4. Estructura de la página
 
 1. **Header** — navegación fija, horario de atención en la barra superior.
-2. **Hero** — propuesta de valor, CTA de llamada, ficha del local con logo real.
+2. **Hero** — propuesta de valor, CTA de llamada, ficha del local con logo real y tira de fotos en movimiento.
 3. **Qué encontrás** — repuestos, accesorios y consulta de disponibilidad.
-4. **Cómo consultar** — tres pasos.
-5. **Región fronteriza** — Rivera ↔ Santana do Livramento (incluye línea en portugués).
-6. **Ubicación** — dirección, horario, mapa de Google embebido y enlace para abrir la ubicación.
-7. **Contacto** — WhatsApp, teléfonos, redes y generador de consulta con envío directo.
-8. **Preguntas frecuentes** — seis respuestas, también en JSON-LD.
-9. **Footer** — horario, crédito de desarrollo FB Informática.
-10. **Botón flotante de WhatsApp** — visible en todo el sitio, con mensaje precargado.
+4. **Catálogo** — muestra del surtido: productos estrella Liqui Moly y doce rubros más.
+5. **Cómo consultar** — tres pasos.
+6. **Región fronteriza** — Rivera ↔ Santana do Livramento (incluye línea en portugués).
+7. **Ubicación** — dirección, horario, mapa de Google embebido y enlace para abrir la ubicación.
+8. **Contacto** — WhatsApp, teléfonos, redes y generador de consulta con envío directo.
+9. **Preguntas frecuentes** — seis respuestas, también en JSON-LD.
+10. **Footer** — horario, crédito de desarrollo FB Informática.
+11. **Botón flotante de WhatsApp** — visible en todo el sitio, con mensaje precargado.
 
 ---
 
-## 5. SEO
+## 5. Catálogo y fotos
+
+La sección `#catalogo` se presenta explícitamente como **una muestra** del surtido, no como el inventario completo:
+
+- **Productos estrella:** panel oscuro con cinco referencias Liqui Moly (Cera Tec, MoS2, ATF, hidráulico y tapafugas). Cada tarjeta enlaza a WhatsApp con el producto en el mensaje.
+- **Más variedad en el local:** doce tarjetas (correas, grasas, refrigerante, estética, herramientas eléctricas y de taller, iluminación LED, accesorios 12 V, químicos, cámara endoscópica, limpiacontactos y mangueras hidráulicas), también con consulta directa.
+- **Aviso:** las fotos son de referencia; disponibilidad y compatibilidad se confirman al consultar. No se publican precios ni stock.
+- **Hero:** tira de seis fotos en bucle continuo (52 s), con botón Pausar/Reanudar, pausa al pasar el mouse o enfocar, scroll manual como respaldo y desactivada con `prefers-reduced-motion`.
+
+### Imágenes
+
+Las fotos se publican en `assets/img/productos/` como WebP:
+
+| Uso | Tamaño | Peso aproximado |
+| --- | --- | --- |
+| Tarjetas (4:5) | 720×900 | 27–110 KB |
+| Miniaturas de la tira (1:1) | 480×480 | 15–42 KB |
+
+Total del catálogo: **1,3 MB** para 27 archivos. Los originales JPEG (8,4 MB) quedan fuera del repositorio, en `C:\Proyectos\Edi_Repuestos_originales`.
+
+### Regenerar las fotos
+
+`tools/_build_productos.py` es la fuente de verdad de los slugs. Recorta en 4:5 y 1:1, convierte a WebP y mueve los JPEG de `assets/img` a la carpeta externa de originales.
+
+```bash
+python tools/_build_productos.py
+```
+
+Si se agrega un producto: dejar el JPEG en `assets/img/`, sumar su slug al diccionario `ITEMS`, ejecutar el script y agregar la tarjeta en `index.html`. Conviene mantener el slug, el nombre visible y el mensaje de WhatsApp alineados.
+
+### Etiquetas pendientes de confirmar
+
+Los nombres y las descripciones salieron de los nombres de archivo y deben ser validados por el cliente antes de considerarlos definitivos: Cera Tec, MoS2, ATF, hidráulico, tapafugas, correas, grasas, refrigerante, estética vehicular, herramientas eléctricas, herramientas de taller, iluminación LED, accesorios 12 V, químicos y selladores, cámara endoscópica, limpiacontactos, mangueras hidráulicas y linterna frontal.
+
+Los tres videos de baterías (`bateria_funsa.mp4`, `bateria_moura.mp4`, `bateria_ruta.mp4`) no se usan: quedaron en la carpeta externa `videos/` a la espera de que el cliente decida si quiere una sección de baterías.
+
+---
+
+## 6. SEO
 
 - **Title (56):** `Edi Repuestos | Repuestos Automotores en Rivera, Uruguay`
-- **Meta description (146):** repuestos y accesorios multimarca, dirección y teléfono.
+- **Meta description (145):** repuestos y accesorios multimarca, Liqui Moly, herramientas, iluminación LED, dirección y consulta por WhatsApp.
 - **H1 único:** `Repuestos y accesorios automotores en Rivera | Edi Repuestos`.
 - **Canonical:** raíz del dominio (el sitio es una sola página; no se creó una URL hija para la keyword principal).
-- **Keywords cubiertas en texto real:** repuestos automotores Rivera, repuestos y accesorios, multimarca, autopartes, frontera con Santana do Livramento, casa de repuestos.
+- **Keywords cubiertas en texto real:** repuestos automotores Rivera, repuestos y accesorios, multimarca, autopartes, Liqui Moly, lubricantes, herramientas, iluminación LED, frontera con Santana do Livramento, casa de repuestos.
 - **JSON-LD:** `AutoPartsStore` (dirección, teléfono, `contactPoint` de WhatsApp, `openingHoursSpecification`, área servida, `sameAs`), `WebSite` y `FAQPage` alineado con las preguntas visibles.
 
 ### Dominio
@@ -119,7 +163,7 @@ Implica una dependencia externa: al llegar a la sección, el navegador descarga 
 
 ---
 
-## 6. Datos verificados y datos omitidos
+## 7. Datos verificados y datos omitidos
 
 ### Verificado y publicado
 
@@ -145,7 +189,7 @@ Cuando el cliente confirme estos datos, se agregan al HTML y al JSON-LD (`email`
 
 ---
 
-## 7. Checklist de publicación
+## 8. Checklist de publicación
 
 - [ ] Publicar desde `main` en GitHub Pages y cargar el dominio `edirepuestos.com`.
 - [ ] Crear los registros DNS (A del apex y CNAME de `www`) y activar Enforce HTTPS.
@@ -160,7 +204,7 @@ Cuando el cliente confirme estos datos, se agregan al HTML y al JSON-LD (`email`
 
 ---
 
-## 8. Mantenimiento
+## 9. Mantenimiento
 
 ### Regenerar la imagen Open Graph
 

@@ -1,7 +1,7 @@
 # Auditoría — Edi Repuestos
 
 Fecha: 16/11/2026
-Alcance: `index.html`, `assets/css/styles.css`, `assets/js/main.js`, `robots.txt`, `sitemap.xml`.
+Alcance: `index.html`, `assets/css/styles.css`, `assets/js/main.js`, `assets/img/productos/`, `robots.txt`, `sitemap.xml`.
 Método: revisión de código, medición en navegador real (Chromium vía Edge), Lighthouse 13.4.1 sobre servidor local `http://localhost:4173/`, y comprobaciones programáticas de layout, contraste, semántica e interacción.
 
 ---
@@ -17,7 +17,9 @@ Método: revisión de código, medición en navegador real (Chromium vía Edge),
 | Recursos con error (4xx/5xx) | 0 |
 | Scroll horizontal | Ninguno en 14 anchos (320 → 1440 px) |
 | Contraste de texto | Todos los textos pasan AA; sin excepciones reales |
-| Interacciones | Menú móvil, Escape, clic externo, formulario y estado de copiado verificados |
+| Interacciones | Menú móvil, Escape, clic externo, formulario, estado de copiado y pausa de la tira verificados |
+| Catálogo | 17 tarjetas y 12 miniaturas WebP, todas con 200 y sin imágenes rotas |
+| Tira del hero | 6 fotos + 6 clones, bucle de 52 s, pausa accesible y sin desborde de página |
 | Mapa embebido | Iframe de Google Maps con HTTP 200, alto reservado y sin desborde en 14 anchos |
 
 La categoría Performance no fue emitida por la herramienta de auditoría disponible. La medición se cubrió con análisis de peso, recursos y renderizado. El mapa embebido de Google es el único recurso de terceros y carga diferido.
@@ -86,6 +88,17 @@ Medición en iframes a **320, 360, 390, 414, 480, 560, 640, 768, 834, 980, 1024,
 - Sin desbordes de elementos de flujo (el único elemento que excede el viewport es el número decorativo `570`, contenido por `overflow: hidden` en `.hero`).
 - Mapa de Google: el `.map-frame` mantiene la proporción `1.06 / 1` en todos los anchos (265×250 px a 320 px, 620×585 px en desktop) y la cabecera del mapa no desborda ni recorta texto.
 
+### Catálogo y multimedia
+
+- **Grilla:** 4 columnas en desktop → 3 a 1180 px → 2 a 760 px; estrellas 5 → 4 → 3 → 2. Verificado midiendo `gridTemplateColumns` en once anchos (320 → 1440 px).
+- **Imágenes:** 17 tarjetas (5 estrellas + 12 rubros) y 12 miniaturas. Todas responden 200 y ninguna queda rota; las tarjetas usan `width`/`height` y `aspect-ratio` para no aportar CLS.
+- **Área táctil:** los enlaces “Consultar” y las tarjetas mantienen un mínimo de 24 px; la medición automática no devolvió objetivos pequeños.
+- **Enlaces de consulta:** cada tarjeta arma `https://wa.me/59899823483?text=` con el nombre del producto. Verificado el prefijo y el texto decodificado en una tarjeta del catálogo.
+- **Tira del hero:** con JS se duplican los seis elementos, los clones quedan `aria-hidden="true"` y con `alt=""`. El botón aparece solo con JS, alterna `data-paused` y `aria-pressed`, cambia entre Pausar y Reanudar, y `animation-play-state` pasa a `paused`. Con `prefers-reduced-motion` no se duplica nada y no hay animación.
+- **Respaldo sin JS:** el contenedor es `overflow-x: auto` con `scroll-snap`; si no hay JS, la tira se recorre a mano y el botón permanece oculto.
+- **Desborde:** el único elemento que excede el viewport es la pista de la tira dentro de su contenedor con `overflow: hidden`, comportamiento intencional. El `scrollWidth` del documento sigue igual al ancho de ventana en los once anchos.
+- **Contraste del catálogo:** los textos nuevos (`#b9bbae`, `#8f9184` y lima sobre `#0a0b08`; `#3f6d12` y `#5b5d51` sobre blanco) pasan AA.
+
 ### Contraste
 
 Cálculo de relación de contraste sobre color computado y fondo efectivo heredado, para todos los nodos de texto visibles.
@@ -128,14 +141,15 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 
 ### Rendimiento
 
-- Peso de la página: ~31 KB HTML + 40 KB CSS + 5 KB JS + 93 KB fuentes + 40 KB logos ≈ **209 KB sin comprimir** (≈70–80 KB con gzip/brotli).
+- Peso inicial: ~55 KB HTML + 47 KB CSS + 7 KB JS + 91 KB fuentes + 41 KB logos + ~160 KB de miniaturas de la tira ≈ **400 KB sin comprimir** (≈150–180 KB con gzip/brotli). El resto del catálogo (≈1,1 MB) se carga por `loading="lazy"` al llegar a la sección.
+- Catálogo completo: 27 WebP, **1,3 MB**. Tarjetas 720×900 (27–110 KB) y miniaturas 480×480 (15–42 KB).
 - Imagen Open Graph (92 KB) no se descarga al visitar el sitio.
 - Fuentes autoalojadas con `preload` y `font-display: swap`; solo dos familias y tres archivos.
 - Logo en WebP (13/27 KB) con `width`/`height` explícitos para evitar CLS.
 - Sin librerías, sin polyfills, sin JS bloqueante (`defer`).
 - Animaciones limitadas a `transform`/`opacity` y desactivadas con `prefers-reduced-motion`.
 - CSS con `clamp()` en lugar de múltiples breakpoints de tipografía.
-- El mapa embebido es el único recurso pesado: se carga con `loading="lazy"` y el contenedor reserva el alto con `aspect-ratio`, así que no aporta CLS. Sin él, el peso de la página ronda los 209 KB sin comprimir.
+- El mapa embebido y la tira del hero son los únicos recursos que se cargan al inicio sin esperar scroll. El iframe usa `loading="lazy"` y alto reservado (`aspect-ratio`), así que no aporta CLS; las 6 miniaturas de la tira pesan ~160 KB en total y las 27 fotos restantes se cargan por `loading="lazy"`.
 
 ---
 
@@ -148,7 +162,9 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 | 3 | Mapa embebido de Google (terceros) | Carga scripts de Google y puede setear cookies propias | Se usó el iframe oficial con `loading="lazy"` y alto reservado (`aspect-ratio`) para no afectar CLS. La dirección y el enlace a Maps funcionan sin el iframe. Si se exige privacidad estricta, se cambia por imagen estática enlazada. |
 | 4 | Sin formulario con backend | No hay envío automático de consultas desde un servidor | El mensaje se envía por WhatsApp con el texto precargado o se copia. Sin datos almacenados, sin spam, sin mantenimiento. |
 | 5 | Datos de contacto secundarios omitidos | Puede faltar un canal que el cliente sí usa | Se documentaron en README para agregarlos cuando se confirmen. |
-| 6 | Performance no medida por Lighthouse | Sin métricas LCP/CLS/TBT de laboratorio | Se midió peso y composición; el iframe del mapa es el único recurso pesado y carga diferido. Al publicar conviene correr PageSpeed Insights sobre la URL final. |
+| 6 | Performance no medida por Lighthouse | Sin métricas LCP/CLS/TBT de laboratorio | Se midió peso y composición; el iframe del mapa y las miniaturas del hero son lo único que carga al inicio. Al publicar conviene correr PageSpeed Insights sobre la URL final. |
+| 7 | Nombres de productos sin confirmar | Las etiquetas del catálogo salieron de los nombres de archivo; un nombre o una descripción podría no coincidir con el producto real | Se muestran como referencia y cada tarjeta invita a consultar. El cliente debe validar la lista del README antes de difundir el catálogo. |
+| 8 | Fotos de producto no revisadas visualmente por el desarrollador | El recorte 4:5 y la asignación foto–producto no fueron verificados a ojo | Se conservan los originales fuera del repo para reencuadrar. Conviene una revisión rápida del cliente sobre la página publicada. |
 
 ---
 
@@ -157,14 +173,16 @@ Cálculo de relación de contraste sobre color computado y fondo efectivo hereda
 1. Mantener sincronizados el horario y el WhatsApp de la web con Google Business Profile (el schema ya los declara).
 2. Revisar que el embed de Google Maps siga mostrando el pin correcto si el listado del local cambia de place ID.
 3. Crear o reclamar Google Business Profile con la dirección exacta y las mismas horas que la web.
-4. Evaluar fotos reales del local y del mostrador: hoy el sitio evita imágenes inventadas, pero una foto propia mejora confianza y conversión.
-5. Si se confirma el envío a todo el país, agregar una sección breve y actualizar el `areaServed` del schema.
-6. Revisar en Search Console a los 30 días: impresiones por “repuestos Rivera”, CTR y consultas por clic en teléfono.
+4. Revisar las fotos y los nombres del catálogo con el cliente: el sitio ya evita inventar datos, pero la asignación foto–producto se hizo por nombre de archivo.
+5. Evaluar fotos reales del mostrador y del local: hoy el sitio usa fotos de productos, y una toma del frente del local mejora confianza.
+6. Si se confirma el envío a todo el país, agregar una sección breve y actualizar el `areaServed` del schema.
+7. Si el cliente quiere publicar baterías, reutilizar los tres MP4 que quedaron en `videos/` como sección propia (hoy no se usan).
+8. Revisar en Search Console a los 30 días: impresiones por “repuestos Rivera”, CTR y consultas por clic en teléfono.
 
 ---
 
 ## 6. Conclusión
 
-El sitio cumple el objetivo: una página informativa, rápida y accesible que posiciona “repuestos automotores en Rivera”, muestra los datos verificados del local y deriva la consulta a WhatsApp, al teléfono o a Instagram.
+El sitio cumple el objetivo: una página informativa, rápida y accesible que posiciona “repuestos automotores en Rivera”, muestra los datos verificados del local, presenta una muestra del catálogo con Liqui Moly como estrella y deriva la consulta a WhatsApp, al teléfono o a Instagram.
 
-No quedan problemas críticos ni altos abiertos. Falta publicar el dominio (`edirepuestos.com`) con DNS y HTTPS, y unificar el listado de Google Business Profile con estos datos. Los datos comerciales no confirmados quedaron fuera de la página de forma deliberada para no publicar información falsa.
+No quedan problemas críticos ni altos abiertos. Falta publicar el dominio (`edirepuestos.com`) con DNS y HTTPS, unificar el listado de Google Business Profile con estos datos y que el cliente valide los nombres del catálogo. Los datos comerciales no confirmados quedaron fuera de la página de forma deliberada para no publicar información falsa.

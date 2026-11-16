@@ -183,4 +183,40 @@
       announce(copied);
     }
   }
+
+  /* ---------------------------------------------------------------------
+     Tira de muestra: loop continuo con pausa accesible
+     --------------------------------------------------------------------- */
+
+  var galleryViewport = document.getElementById("galeria-viewport");
+  var galleryTrack = document.getElementById("galeria-muestra");
+  var galleryToggle = document.getElementById("galeria-toggle");
+  var motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (galleryViewport && galleryTrack && galleryToggle && !motionQuery.matches) {
+    var galleryItems = Array.prototype.slice.call(galleryTrack.children);
+
+    galleryItems.forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      var cloneImage = clone.querySelector("img");
+      if (cloneImage) {
+        cloneImage.setAttribute("alt", "");
+        cloneImage.removeAttribute("loading");
+      }
+      galleryTrack.appendChild(clone);
+    });
+
+    galleryViewport.classList.add("is-loop");
+    galleryToggle.hidden = false;
+
+    galleryToggle.addEventListener("click", function () {
+      var paused = galleryViewport.getAttribute("data-paused") === "true";
+      galleryViewport.setAttribute("data-paused", String(!paused));
+      galleryToggle.setAttribute("aria-pressed", String(!paused));
+      galleryToggle.querySelector(".gallery-toggle-text").textContent = paused
+        ? "Pausar"
+        : "Reanudar";
+    });
+  }
 })();
