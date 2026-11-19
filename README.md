@@ -224,3 +224,11 @@ Todo el texto está en `index.html`. Si se agrega o modifica una pregunta frecue
 ### Crédito de desarrollo
 
 El pie incluye el crédito discreto a FB Informática con enlace a `https://www.fbinformaticauy.com`. Mantenerlo salvo indicación contraria.
+
+## Actualización del 19/11/2026
+
+- Se agregaron seis imágenes del cliente al catálogo: bujías Bosch, bujías premium, líquido para frenos, rulemanes, tipos de líquido de frenos y bujías por cantidad de electrodos.
+- Las imágenes se muestran completas y permiten abrir una versión ampliada. Las miniaturas cargan de forma diferida.
+- `python tools/_build_novedades.py` regenera las versiones WebP sin recortar ni mover los originales JPEG de `assets/img/productos/`, que quedan ignorados por Git.
+- WhatsApp adicional: +598 98 672 914. El principal sigue siendo +598 99 823 483.
+- Facebook: https://www.facebook.com/share/1EXBayxRCW/?mibextid=wwXIfr (enlace proporcionado por el cliente).

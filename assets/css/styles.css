@@ -1265,6 +1265,10 @@ h2 {
   transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
 }
 
+.catalog-card--complete img {
+  object-fit: contain;
+}
+
 .catalog-card:hover img {
   transform: translateY(-3px);
   box-shadow: 10px 10px 0 rgba(10, 11, 8, 0.07);

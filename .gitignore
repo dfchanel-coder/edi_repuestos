@@ -13,3 +13,6 @@ tools/*-check.png
 
 # Perfil temporal de renderizado
 tools/.edge-preview/
+
+# Fotos originales del cliente: se publican las versiones WebP
+assets/img/productos/*.jpeg
